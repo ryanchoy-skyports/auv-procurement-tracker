@@ -139,6 +139,16 @@ async function loadDemo() {
   el.lastSync.textContent = "Demo mode — changes are not saved anywhere";
 }
 
+function showSignedOutPlaceholder(message) {
+  state.rows = [];
+  el.tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 48px 16px; color: var(--muted);">${escapeHtml(message)}</td></tr>`;
+  el.totalEstimated.textContent = "—";
+  el.totalConfirmed.textContent = "—";
+  el.totalItems.textContent = "—";
+  el.totalDone.textContent = "—";
+  el.lastSync.textContent = "";
+}
+
 async function loadLive() {
   const rows = await window.SkyportsGraph.listItems();
   state.rows = rows;
@@ -210,14 +220,14 @@ async function init() {
     console.error(err);
     showBanner(`Sign-in failed: ${err.message}`, "error");
     renderAuthArea();
-    await loadDemo();
+    showSignedOutPlaceholder("Sign in with Microsoft above to load the tracker.");
     return;
   }
 
   if (!account) {
-    showBanner("Not signed in yet — showing demo data. Click Sign in with Microsoft above to load the live SharePoint list.");
+    showBanner("Not signed in yet. Click Sign in with Microsoft above to load the live tracker.");
     renderAuthArea();
-    await loadDemo();
+    showSignedOutPlaceholder("Sign in with Microsoft above to load the tracker.");
     return;
   }
 
@@ -231,7 +241,7 @@ async function init() {
     state.live = false;
     showBanner(`Signed in as ${account.username}, but couldn't load the SharePoint list: ${err.message}`, "error");
     renderAuthArea();
-    await loadDemo();
+    showSignedOutPlaceholder("Couldn't load the tracker — see the error above.");
   }
 }
 
