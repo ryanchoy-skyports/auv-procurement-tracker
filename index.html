@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AUV Procurement Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://alcdn.msauth.net/browser/3.18.0/js/msal-browser.min.js"></script>
+</head>
+<body>
+  <div class="topbar">
+    <div>
+      <h1>AUV Procurement Tracker</h1>
+      <p class="subtitle">Fit-out &amp; procurement status, live costings for the business model</p>
+    </div>
+    <div class="auth-area" id="auth-area"></div>
+  </div>
+
+  <main>
+    <div class="banner" id="banner" style="display:none">
+      Not signed in yet — showing demo data. Click <strong>Sign in with Microsoft</strong> above to load the live SharePoint list.
+    </div>
+
+    <div class="totals-strip">
+      <div class="card">
+        <div class="label">Estimated cost (all items)</div>
+        <div class="value" id="total-estimated">—</div>
+      </div>
+      <div class="card">
+        <div class="label">Confirmed cost (all items)</div>
+        <div class="value" id="total-confirmed">—</div>
+      </div>
+      <div class="card">
+        <div class="label">Items tracked</div>
+        <div class="value" id="total-items">—</div>
+      </div>
+      <div class="card">
+        <div class="label">Done</div>
+        <div class="value" id="total-done">—</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <select id="filter-status">
+        <option value="All">All statuses</option>
+        <option value="Not Started">Not Started</option>
+        <option value="Pending">Pending</option>
+        <option value="On Hold">On Hold</option>
+        <option value="Done">Done</option>
+      </select>
+      <input type="search" id="search" placeholder="Search item, owner, notes...">
+      <div class="spacer"></div>
+      <div class="last-sync" id="last-sync"></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Status</th>
+            <th>Update</th>
+            <th>Next action</th>
+            <th>Est. cost</th>
+            <th>Confirmed cost</th>
+            <th>Cost status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <footer>AUV Procurement Tracker · Skyports Infra &amp; Technology</footer>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="graph.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
