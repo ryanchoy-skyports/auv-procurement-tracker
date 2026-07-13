@@ -183,7 +183,7 @@ select.status-select {
   background: var(--card);
 }
 
-td input[type="text"], td input[type="number"], td select {
+td input[type="text"], td input[type="number"], td select, td textarea {
   width: 100%;
   border: 1px solid transparent;
   border-radius: 6px;
@@ -193,10 +193,10 @@ td input[type="text"], td input[type="number"], td select {
   color: var(--text);
   font-family: inherit;
 }
-td input[type="text"]:hover, td input[type="number"]:hover, td select:hover {
+td input[type="text"]:hover, td input[type="number"]:hover, td select:hover, td textarea:hover {
   border-color: var(--grid);
 }
-td input[type="text"]:focus, td input[type="number"]:focus, td select:focus {
+td input[type="text"]:focus, td input[type="number"]:focus, td select:focus, td textarea:focus {
   border-color: var(--blue);
   background: #fff;
   outline: none;
@@ -204,8 +204,15 @@ td input[type="text"]:focus, td input[type="number"]:focus, td select:focus {
 
 td input[type="number"] { text-align: right; }
 
+td textarea {
+  resize: vertical;
+  min-height: 54px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
 .cost-col { min-width: 120px; }
-.note-col { min-width: 220px; }
+.note-col { min-width: 320px; }
 
 .saving-flag {
   font-size: 11px;

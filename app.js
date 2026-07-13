@@ -74,8 +74,8 @@ function renderRows() {
           ${["Not Started", "Pending", "On Hold", "Done"].map((s) => `<option value="${s}" ${s === row.status ? "selected" : ""}>${s}</option>`).join("")}
         </select>
       </td>
-      <td class="note-col"><input type="text" data-field="update" value="${escapeAttr(row.update)}" placeholder="Status note"></td>
-      <td class="note-col"><input type="text" data-field="nextAction" value="${escapeAttr(row.nextAction)}" placeholder="Next action"></td>
+      <td class="note-col"><textarea data-field="update" rows="2" placeholder="Status note">${escapeHtml(row.update)}</textarea></td>
+      <td class="note-col"><textarea data-field="nextAction" rows="2" placeholder="Next action">${escapeHtml(row.nextAction)}</textarea></td>
       <td class="cost-col"><input type="number" data-field="estimatedCost" value="${row.estimatedCost ?? ""}" placeholder="0"></td>
       <td class="cost-col"><input type="number" data-field="confirmedCost" value="${row.confirmedCost ?? ""}" placeholder="0"></td>
       <td>
@@ -98,9 +98,6 @@ function renderRows() {
 
 function escapeHtml(s) {
   return String(s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-}
-function escapeAttr(s) {
-  return escapeHtml(s);
 }
 
 async function onFieldChange(row, input) {
