@@ -1,8 +1,8 @@
-// Filled in once IT registers the Entra ID app (see README.md "IT / Admin setup").
-// Until clientId is set, the app runs in demo mode against data/seed.json only.
+// Client ID / tenant ID are public identifiers for a SPA (PKCE, no client secret
+// involved or needed) — safe to ship in static JS. Never add a client secret here.
 window.APP_CONFIG = {
-  clientId: "", // TODO: Application (client) ID from Entra ID app registration
-  tenantId: "", // TODO: Directory (tenant) ID
+  clientId: "6baf804e-e13a-4e6b-b7ff-733a2b06cb4c",
+  tenantId: "7c20608d-4a1b-45e8-b553-3ef51e6a1960",
   redirectUri: window.location.origin + window.location.pathname,
 
   // SharePoint site + list that back the tracker.
