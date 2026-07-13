@@ -95,8 +95,11 @@ URL above.
 `lastModifiedDateTime` / `lastModifiedBy` come from Graph automatically per item — no
 manual "last updated" tracking needed.
 
-Seed data in `data/seed.json` is the 26-item AUV Procurement Scope Matrix plus the
-Ceilometer line from the 13 Jul procurement update email, with status/notes filled in
-from that email where known. Worth a quick sanity check against the source
-`AUV Procurement Scope Matrix.xlsx` before the first real sync, since a couple of the
-notes (rows 17-20) were reconstructed from a slightly ambiguous table layout.
+Seed data in `data/seed.json` is the 26-item AUV Procurement Scope Matrix (verified
+directly against `AUV Procurement Scope Matrix.xlsx`) plus the Ceilometer line, with
+status/notes for the 6 items covered in the 13 Jul procurement update email filled in
+from that email.
+
+`AUV Fit Out Schedule.xlsx` (installation task plan with start/end dates, RAG status,
+assignees) is a separate document — task-level install scheduling, not procurement
+cost/status — and isn't reflected in this tracker yet.
