@@ -37,19 +37,25 @@ in the Skyports Entra ID tenant needs to:
      least-privileged option and means this app can be granted access to **only** the
      `Infra-Technology` SharePoint site, not the whole tenant.
 3. **Grant the app access to the `Infra-Technology` site.** `Sites.Selected` requires
-   a one-time Graph call to attach the app to that specific site with write access:
+   a one-time Graph call to attach the app to that specific site — role must be
+   `owner` (or `fullcontrol`), not `write`: creating a new list (which this app does
+   on first run) needs `Sites.Selected+Owner` per
+   [Microsoft's permissions table](https://learn.microsoft.com/graph/permissions-selected-overview#how-selected-scopes-work-with-sharepoint-and-onedrive-permissions);
+   `write` only covers editing existing list items.
    ```http
    POST https://graph.microsoft.com/v1.0/sites/{site-id}/permissions
    Content-Type: application/json
 
    {
-     "roles": ["write"],
+     "roles": ["owner"],
      "grantedToIdentities": [{
        "application": { "id": "{app-client-id}", "displayName": "AUV Procurement Tracker" }
      }]
    }
    ```
-   (Run with an account that has `Sites.FullControl.All` — e.g. via Graph Explorer.)
+   Run via [Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer),
+   signed in as a Global/SharePoint Admin who has also consented to `Sites.FullControl.All`
+   (delegated) for Graph Explorer itself — that's a separate consent from this app's.
 4. **Hand Ryan**: the **Application (client) ID** and **Directory (tenant) ID** from
    step 1's app registration Overview page. Paste them into `config.js`:
    ```js
