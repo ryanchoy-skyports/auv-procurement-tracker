@@ -163,20 +163,15 @@ function renderAuthArea() {
   btn.className = "btn";
   btn.textContent = state.live ? "Signed in" : "Sign in with Microsoft";
   btn.disabled = state.live;
-  btn.addEventListener("click", async () => {
+  btn.addEventListener("click", () => {
+    // loginRedirect navigates away immediately; the return trip is handled in init().
     btn.disabled = true;
     btn.textContent = "Signing in...";
-    try {
-      await window.SkyportsGraph.signIn();
-      state.live = true;
-      renderAuthArea();
-      el.banner.style.display = "none";
-      await loadLive();
-    } catch (err) {
+    window.SkyportsGraph.signIn().catch((err) => {
       console.error(err);
       alert(`Sign-in failed: ${err.message}`);
       renderAuthArea();
-    }
+    });
   });
   el.authArea.appendChild(btn);
 }
@@ -194,12 +189,26 @@ function wireToolbar() {
 
 async function init() {
   wireToolbar();
-  renderAuthArea();
+
   if (window.SkyportsGraph.isConfigured()) {
+    try {
+      const account = await window.SkyportsGraph.initAuth();
+      if (account) {
+        state.live = true;
+        renderAuthArea();
+        el.banner.style.display = "none";
+        await loadLive();
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+    }
     el.banner.style.display = "block";
   } else {
     el.banner.style.display = "none";
   }
+
+  renderAuthArea();
   await loadDemo();
 }
 

@@ -36,7 +36,9 @@ function getMsalApp() {
   return msalApp;
 }
 
-async function signIn() {
+// Redirect flow (not popup) — corporate browsers/policies often block popups,
+// so this must work without relying on one.
+async function initAuth() {
   const app = getMsalApp();
   await app.initialize();
   const result = await app.handleRedirectPromise();
@@ -49,15 +51,18 @@ async function signIn() {
     app.setActiveAccount(accounts[0]);
     return accounts[0];
   }
-  const loginResult = await app.loginPopup({ scopes: window.APP_CONFIG.graphScopes });
-  app.setActiveAccount(loginResult.account);
-  return loginResult.account;
+  return null;
+}
+
+function signIn() {
+  const app = getMsalApp();
+  return app.loginRedirect({ scopes: window.APP_CONFIG.graphScopes });
 }
 
 function signOut() {
   const app = getMsalApp();
   const account = app.getActiveAccount();
-  return app.logoutPopup({ account });
+  return app.logoutRedirect({ account });
 }
 
 async function getToken() {
@@ -68,8 +73,8 @@ async function getToken() {
     const result = await app.acquireTokenSilent(request);
     return result.accessToken;
   } catch (err) {
-    const result = await app.acquireTokenPopup(request);
-    return result.accessToken;
+    await app.acquireTokenRedirect(request);
+    throw err; // acquireTokenRedirect navigates away; this line only runs if it didn't
   }
 }
 
@@ -191,4 +196,4 @@ async function updateItem(itemId, partialRow) {
   });
 }
 
-window.SkyportsGraph = { isConfigured, signIn, signOut, listItems, createItem, updateItem };
+window.SkyportsGraph = { isConfigured, initAuth, signIn, signOut, listItems, createItem, updateItem };
