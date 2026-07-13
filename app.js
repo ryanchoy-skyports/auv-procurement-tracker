@@ -187,29 +187,55 @@ function wireToolbar() {
   });
 }
 
+function showBanner(message, kind) {
+  el.banner.textContent = message;
+  el.banner.className = kind === "error" ? "banner error" : "banner";
+  el.banner.style.display = "block";
+}
+function hideBanner() {
+  el.banner.style.display = "none";
+}
+
 async function init() {
   wireToolbar();
 
-  if (window.SkyportsGraph.isConfigured()) {
-    try {
-      const account = await window.SkyportsGraph.initAuth();
-      if (account) {
-        state.live = true;
-        renderAuthArea();
-        el.banner.style.display = "none";
-        await loadLive();
-        return;
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    el.banner.style.display = "block";
-  } else {
-    el.banner.style.display = "none";
+  if (!window.SkyportsGraph.isConfigured()) {
+    hideBanner();
+    renderAuthArea();
+    await loadDemo();
+    return;
   }
 
-  renderAuthArea();
-  await loadDemo();
+  let account = null;
+  try {
+    account = await window.SkyportsGraph.initAuth();
+  } catch (err) {
+    console.error(err);
+    showBanner(`Sign-in failed: ${err.message}`, "error");
+    renderAuthArea();
+    await loadDemo();
+    return;
+  }
+
+  if (!account) {
+    showBanner("Not signed in yet — showing demo data. Click Sign in with Microsoft above to load the live SharePoint list.");
+    renderAuthArea();
+    await loadDemo();
+    return;
+  }
+
+  try {
+    await loadLive();
+    state.live = true;
+    hideBanner();
+    renderAuthArea();
+  } catch (err) {
+    console.error(err);
+    state.live = false;
+    showBanner(`Signed in as ${account.username}, but couldn't load the SharePoint list: ${err.message}`, "error");
+    renderAuthArea();
+    await loadDemo();
+  }
 }
 
 init();

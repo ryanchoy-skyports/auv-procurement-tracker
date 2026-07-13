@@ -227,6 +227,12 @@ tr.saving .saving-flag { visibility: visible; }
 
 .banner a { color: inherit; font-weight: 700; }
 
+.banner.error {
+  background: #fdecea;
+  border-color: #f5b7b1;
+  color: #7a1a12;
+}
+
 footer {
   text-align: center;
   color: var(--muted);
