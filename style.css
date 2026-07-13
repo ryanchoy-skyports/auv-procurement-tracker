@@ -213,6 +213,7 @@ td textarea {
 
 .cost-col { min-width: 120px; }
 .note-col { min-width: 320px; }
+.status-col { min-width: 150px; }
 
 .saving-flag {
   font-size: 11px;

@@ -69,7 +69,7 @@ function renderRows() {
         <div class="item-name">${escapeHtml(row.item)}</div>
         <div class="item-owner">${escapeHtml(row.owner)}${row.coreFunction ? " · " + escapeHtml(row.coreFunction) : ""}</div>
       </td>
-      <td>
+      <td class="status-col">
         <select class="status-select ${STATUS_CLASS[row.status] || ""}" data-field="status">
           ${["Not Started", "Pending", "On Hold", "Done"].map((s) => `<option value="${s}" ${s === row.status ? "selected" : ""}>${s}</option>`).join("")}
         </select>
