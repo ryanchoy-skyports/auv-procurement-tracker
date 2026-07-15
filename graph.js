@@ -196,4 +196,12 @@ async function updateItem(itemId, partialRow) {
   });
 }
 
-window.SkyportsGraph = { isConfigured, initAuth, signIn, signOut, listItems, createItem, updateItem };
+async function deleteItem(itemId) {
+  const siteId = await getSiteId();
+  const listId = await ensureList();
+  await graphFetch(`/sites/${siteId}/lists/${listId}/items/${itemId}`, {
+    method: "DELETE",
+  });
+}
+
+window.SkyportsGraph = { isConfigured, initAuth, signIn, signOut, listItems, createItem, updateItem, deleteItem };
