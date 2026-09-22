@@ -91,12 +91,16 @@ function renderRows() {
     });
 
     tr.querySelectorAll("textarea").forEach((textarea) => {
-      autoResizeTextarea(textarea);
       textarea.addEventListener("input", () => autoResizeTextarea(textarea));
     });
 
     el.tbody.appendChild(tr);
   }
+
+  // Must run after every row is attached to the document — scrollHeight on a
+  // detached node returns the unexpanded CSS height, not the real content
+  // height, which is why long text used to get clipped until you typed.
+  el.tbody.querySelectorAll("textarea").forEach(autoResizeTextarea);
 
   renderTotals();
 }
