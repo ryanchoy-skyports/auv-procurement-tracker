@@ -12,7 +12,7 @@ const COLUMNS = [
   { name: "NextAction", text: { allowMultipleLines: true } },
   { name: "EstimatedCost", currency: { locale: "en-AE" } },
   { name: "ConfirmedCost", currency: { locale: "en-AE" } },
-  { name: "CostStatus", choice: { choices: ["Estimate", "Quote Received", "PO Issued", "Invoiced", "Paid"] } },
+  { name: "CostStatus", choice: { choices: ["Not required", "Estimate", "Quote Received", "PO Issued", "Invoiced", "Paid"] } },
   { name: "Currency", text: {} },
 ];
 
@@ -218,4 +218,20 @@ async function deleteItem(itemId) {
   });
 }
 
-window.SkyportsGraph = { isConfigured, initAuth, signIn, signOut, trySilentSignIn, listItems, createItem, updateItem, deleteItem };
+// Adds a choice to an existing list column if it's not already there.
+// ensureList() only sets the schema on first creation — this is how an
+// already-live list picks up new choices added later (e.g. a new status).
+async function addColumnChoice(columnName, newChoice) {
+  const siteId = await getSiteId();
+  const listId = await ensureList();
+  const cols = await graphFetch(`/sites/${siteId}/lists/${listId}/columns`);
+  const col = cols.value.find((c) => c.name === columnName);
+  if (!col) throw new Error(`Column "${columnName}" not found`);
+  if (col.choice.choices.includes(newChoice)) return;
+  await graphFetch(`/sites/${siteId}/lists/${listId}/columns/${col.id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ choice: { choices: [...col.choice.choices, newChoice] } }),
+  });
+}
+
+window.SkyportsGraph = { isConfigured, initAuth, signIn, signOut, trySilentSignIn, listItems, createItem, updateItem, deleteItem, addColumnChoice };

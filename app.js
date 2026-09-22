@@ -80,7 +80,7 @@ function renderRows() {
       <td class="cost-col"><input type="number" data-field="confirmedCost" value="${row.confirmedCost ?? ""}" placeholder="0"></td>
       <td>
         <select data-field="costStatus">
-          ${["Estimate", "Quote Received", "PO Issued", "Invoiced", "Paid"].map((s) => `<option value="${s}" ${s === row.costStatus ? "selected" : ""}>${s}</option>`).join("")}
+          ${["Not required", "Estimate", "Quote Received", "PO Issued", "Invoiced", "Paid"].map((s) => `<option value="${s}" ${s === row.costStatus ? "selected" : ""}>${s}</option>`).join("")}
         </select>
       </td>
       <td><span class="saving-flag">saved</span></td>
