@@ -90,10 +90,20 @@ function renderRows() {
       input.addEventListener("change", () => onFieldChange(row, input));
     });
 
+    tr.querySelectorAll("textarea").forEach((textarea) => {
+      autoResizeTextarea(textarea);
+      textarea.addEventListener("input", () => autoResizeTextarea(textarea));
+    });
+
     el.tbody.appendChild(tr);
   }
 
   renderTotals();
+}
+
+function autoResizeTextarea(el) {
+  el.style.height = "auto";
+  el.style.height = `${el.scrollHeight}px`;
 }
 
 function escapeHtml(s) {

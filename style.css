@@ -213,8 +213,9 @@ td input[type="text"]:focus, td input[type="number"]:focus, td select:focus, td 
 td input[type="number"] { text-align: right; }
 
 td textarea {
-  resize: vertical;
-  min-height: 54px;
+  resize: none;
+  overflow: hidden;
+  min-height: 34px;
   line-height: 1.4;
   white-space: pre-wrap;
 }
