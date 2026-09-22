@@ -59,6 +59,20 @@ function signIn() {
   return app.loginRedirect({ scopes: window.APP_CONFIG.graphScopes });
 }
 
+// Tries to sign in with zero visible UI, using an existing Microsoft session
+// in the browser (no redirect, no popup). Returns null rather than throwing
+// if that's not possible — callers fall back to a real sign-in from there.
+async function trySilentSignIn() {
+  const app = getMsalApp();
+  try {
+    const result = await app.ssoSilent({ scopes: window.APP_CONFIG.graphScopes });
+    app.setActiveAccount(result.account);
+    return result.account;
+  } catch (err) {
+    return null;
+  }
+}
+
 function signOut() {
   const app = getMsalApp();
   const account = app.getActiveAccount();
@@ -204,4 +218,4 @@ async function deleteItem(itemId) {
   });
 }
 
-window.SkyportsGraph = { isConfigured, initAuth, signIn, signOut, listItems, createItem, updateItem, deleteItem };
+window.SkyportsGraph = { isConfigured, initAuth, signIn, signOut, trySilentSignIn, listItems, createItem, updateItem, deleteItem };

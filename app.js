@@ -225,10 +225,27 @@ async function init() {
   }
 
   if (!account) {
-    showBanner("Not signed in yet. Click Sign in with Microsoft above to load the live tracker.");
-    renderAuthArea();
-    showSignedOutPlaceholder("Sign in with Microsoft above to load the tracker.");
-    return;
+    // No manual click needed for the common case: try a silent SSO sign-in
+    // first (invisible, no redirect). If that's not possible, fall back to
+    // a real redirect automatically — but only once per tab, so a genuine
+    // failure (declined consent, not in the allowed group, etc.) doesn't
+    // loop forever.
+    account = await window.SkyportsGraph.trySilentSignIn();
+
+    if (!account) {
+      const alreadyTried = sessionStorage.getItem("auv-auto-signin-tried");
+      if (!alreadyTried) {
+        sessionStorage.setItem("auv-auto-signin-tried", "1");
+        showBanner("Signing you in...");
+        window.SkyportsGraph.signIn().catch((err) => console.error(err));
+        return; // page navigates away to sign in
+      }
+
+      showBanner("Couldn't sign you in automatically. Click Sign in with Microsoft above.", "error");
+      renderAuthArea();
+      showSignedOutPlaceholder("Sign in with Microsoft above to load the tracker.");
+      return;
+    }
   }
 
   try {
