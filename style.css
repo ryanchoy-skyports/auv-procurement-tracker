@@ -256,3 +256,19 @@ footer {
   font-size: 12px;
   padding: 20px 0 40px;
 }
+
+/* Make Chrome draw form controls and dropdown lists in dark mode */
+:root { color-scheme: dark; }
+
+/* Dropdown items: Skyports surface with white text */
+select option {
+  background-color: var(--skyports-surface);
+  color: var(--text);
+  font-family: "Sharp Grotesk Book", Arial, Helvetica, sans-serif;
+}
+
+/* Selected item: Skyports blue with ink text for legibility */
+select option:checked {
+  background-color: var(--skyports-blue);
+  color: var(--skyports-ink);
+}
